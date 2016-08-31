@@ -110,6 +110,14 @@ var ViewPager = React.createClass({
       onPanResponderMove: (e, gestureState) => {
         var dx = gestureState.dx;
         var offsetX = -dx / this.state.viewWidth + this.childIndex;
+        var max = this.props.dataSource.getPageCount()
+
+        if (offsetX < 0) {
+          offsetX = offsetX * 0.3
+        } else if (offsetX > max) {
+          offsetX = max + (offsetX - max) * 0.3
+        }
+
         this.state.scrollValue.setValue(offsetX);
       },
     });
@@ -303,7 +311,6 @@ var ViewPager = React.createClass({
     return (
       <View style={{flex: 1}}
         onLayout={(event) => {
-            // console.log('ViewPager.onLayout()');
             var viewWidth = event.nativeEvent.layout.width;
             if (!viewWidth || this.state.viewWidth === viewWidth) {
               return;
