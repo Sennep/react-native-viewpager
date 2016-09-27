@@ -103,7 +103,7 @@ var ViewPager = React.createClass({
             this.setState({
               currentPage: this.nextPage
             })
-            this.childIndex = Math.min(1, this.state.currentPage)
+            this.childIndex = Math.min(1, this.nextPage)
             this.state.scrollValue.setValue(this.childIndex)
             return true;
           }
