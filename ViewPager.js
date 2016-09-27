@@ -45,6 +45,7 @@ var ViewPager = React.createClass({
   },
 
   fling: false,
+  nextPage: 0,
 
   getDefaultProps() {
     return {
@@ -95,8 +96,15 @@ var ViewPager = React.createClass({
         if (Math.abs(gestureState.dx) > Math.abs(gestureState.dy)) {
           if (/* (gestureState.moveX <= this.props.edgeHitWidth ||
               gestureState.moveX >= deviceWidth - this.props.edgeHitWidth) && */
-                this.props.locked !== true && !this.fling) {
+                this.props.locked !== true) {
             this.props.hasTouch && this.props.hasTouch(true);
+            // var value = this.state.scrollValue._value
+            // var nextPage = Math.round(value)
+            this.setState({
+              currentPage: this.nextPage
+            })
+            this.childIndex = Math.min(1, this.state.currentPage)
+            this.state.scrollValue.setValue(this.childIndex)
             return true;
           }
         }
@@ -114,8 +122,8 @@ var ViewPager = React.createClass({
 
         if (offsetX < 0) {
           offsetX = offsetX * 0.3
-        } else if (offsetX > max) {
-          offsetX = max + (offsetX - max) * 0.3
+        } else if (offsetX > 1 && this.state.currentPage >= max - 1) {
+          offsetX = 1 + (offsetX - 1) * 0.3
         }
 
         this.state.scrollValue.setValue(offsetX);
@@ -152,7 +160,7 @@ var ViewPager = React.createClass({
 
     if (nextProps.dataSource) {
       var maxPage = nextProps.dataSource.getPageCount() - 1;
-      var constrainedPage = Math.max(0, Math.min(this.state.currentPage, maxPage));
+      var constrainedPage = Math.max(0, Math.min(this.nextPage, maxPage));
       this.setState({
         currentPage: constrainedPage,
       });
@@ -219,6 +227,7 @@ var ViewPager = React.createClass({
           }
           moved && this.props.onChangePage && this.props.onChangePage(pageNumber);
         });
+      this.nextPage = pageNumber
     } else {
       postChange();
       moved && this.props.onChangePage && this.props.onChangePage(pageNumber);
