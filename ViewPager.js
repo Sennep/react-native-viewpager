@@ -157,7 +157,6 @@ var ViewPager = React.createClass({
         this._autoPlayer = null;
       }
     }
-
     if (nextProps.dataSource) {
       var maxPage = nextProps.dataSource.getPageCount() - 1;
       var constrainedPage = Math.max(0, Math.min(this.nextPage, maxPage));
@@ -229,6 +228,7 @@ var ViewPager = React.createClass({
         });
       this.nextPage = pageNumber
     } else {
+      this.nextPage = pageNumber
       postChange();
       moved && this.props.onChangePage && this.props.onChangePage(pageNumber);
     }
